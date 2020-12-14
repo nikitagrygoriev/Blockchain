@@ -1,0 +1,242 @@
+\documentclass{article}
+\usepackage{fancyvrb}
+%--- listing
+\usepackage{color}
+\usepackage{listings}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{placeins}
+
+
+%\usepackage{courier} %caused problems for me
+
+\lstloadlanguages{% Check Documentation for further languages ...
+C,
+C++,
+csh,
+Java
+}
+
+\definecolor{red}{rgb}{0.6,0,0} % for strings
+\definecolor{blue}{rgb}{0,0,0.6}
+\definecolor{green}{rgb}{0,0.8,0}
+\definecolor{darkgreen}{rgb}{0,0.2,0}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\lstset{
+language=csh,
+basicstyle=\footnotesize\ttfamily, 
+numbers=left, 
+numberstyle=\tiny, 
+numbersep=5pt, 
+tabsize=2, 
+extendedchars=true, 
+breaklines=true, 
+frame=b,
+stringstyle=\color{blue}\ttfamily, 
+showspaces=false, 
+showtabs=true, 
+xleftmargin=17pt,
+framexleftmargin=17pt,
+framexrightmargin=5pt,
+framexbottommargin=4pt,
+commentstyle=\color{darkgreen},
+morecomment=[l]{//}, %use comment-line-style!
+morecomment=[s]{/*}{*/}, %for multiline comments
+showstringspaces=false, 
+morekeywords={  abstract, event, new, struct, Auth, AccessType,AuthContext, AuthFilter, AclTables, T, RoleTree, RoleNode,
+                as, explicit, null, switch,
+                base, extern, object, this,
+                bool, false, operator, throw,
+                break, finally, out, true,
+                byte, fixed, override, try,
+                case, float, params, typeof,
+                catch, for, private, uint,
+                char, foreach, protected, ulong,
+                checked, goto, public, unchecked,
+                class, if, readonly, unsafe,
+                const, implicit, ref, ushort,
+                continue, in, return, using,
+                decimal, int, sbyte, virtual,
+                default, interface, sealed, volatile,
+                delegate, internal, short, void,
+                do, is, sizeof, while,
+                double, lock, stackalloc,
+                else, long, static,
+                enum, namespace, string},
+keywordstyle=\color{cyan},
+identifierstyle=\color{red},
+ literate={ą}{{\k{a}}}1
+             {Ą}{{\k{A}}}1
+             {ę}{{\k{e}}}1
+             {Ę}{{\k{E}}}1
+             {ó}{{\'o}}1
+             {Ó}{{\'O}}1
+             {ś}{{\'s}}1
+             {Ś}{{\'S}}1
+             {ł}{{\l{}}}1
+             {Ł}{{\L{}}}1
+             {ż}{{\.z}}1
+             {Ż}{{\.Z}}1
+             {ź}{{\'z}}1
+             {Ź}{{\'Z}}1
+             {ć}{{\'c}}1
+             {Ć}{{\'C}}1
+             {ń}{{\'n}}1
+             {Ń}{{\'N}}1
+}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{black}}
+\DeclareCaptionFormat{listing}{\colorbox{white}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}} %changed \colorbox{8} to \colorbox{blue} cause 8 is not a color!
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+%--- listing end
+\title{Inteligentny system wykrywania zagrożeń w górach} % Title of the assignment
+
+\author{Jakub Natonek, Nikita Grygoriev} % Author name and email address
+\usepackage{tikz}
+\usepackage{enumerate}
+
+% \documentclass[tikz,border=2mm]{standalone}
+ \usetikzlibrary{matrix,positioning}
+
+\begin{document}
+
+\maketitle 
+
+\tableofcontents
+\newpage
+
+\section{Streszczenie systemu} 
+Niniejsze opracowanie modeluje działanie systemu ostrzegawczego przed zagrożeniami występującymi w górach.
+Celem pracy jest zapewnienie bezpieczeństwa turystów oraz optymalizacja pracy ratowników GOPR. Rozwiązanie jest oparte na danych pobranych z rozmieszczonych czujników BTS, dronów BTS oraz dronów z kamerami które lokalizują smartphone'y turystów na danym terenie, co umożliwia ich monitorowanie oraz wysyłanie ostrzeżeń o pojawiających się zagrożeniach.
+
+\section{Lista obiektów}
+\begin{itemize}
+  \item Aplikacja mobilna
+  \item Komputer ratownika
+  \item Zwierzęta
+  \item Stacje / sensory pogodowe
+  \item Drony (BTS / z kamerą)
+  \item Stacje BTS
+  \item Blockchain
+
+  
+\end{itemize}
+\section{Lista bodźców zewnętrznych}
+\begin{itemize}
+  \item Czujniki BTS: wykrywanie nowego smartphone'a z aplikacją mobilną w rejonie czujnika 
+  \item Smartphone: wysyłka lokalizacji turysty
+  \item Sensory pogodowe: wykrywanie niebezpiecznych zjawisk atmosferycznych
+  \item Drony BTS: zwiększanie dokładności lokalizacji obiektów
+  \item Drony z kamerą: bezpośrednie obserwowanie pozycji
+  \item Blockchain: przechowywanie wykrytych zagrożeń lokalizacji turystów
+\end{itemize}
+\clearpage
+
+\section{Diagramy kontekstowe} 
+
+
+\subsection{Proponowany diagram oddziaływań obiektu z kontekstem pogodowym -- W i nie-pogodowym -- S}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{Diagrams-Obiekt.png}
+\caption{E6g -- odległość od przewodniczego, E6a -- odległość od niebezpiecznych zwierząt, E6m -- ruch / brak ruchu, E6r -- znajdywanie się na szlaku / poza szlakiem \hspace{\textwidth} E1-5: Charakter zjawisk pogodowych: lawina, wiatr, mgła, temperatura, deszcz / burza oraz parametry czasowe: pora dnia, pora roku}
+\end{figure}
+\FloatBarrier
+\clearpage
+\subsection{Podział obiektów na źródła, wydarzenia i odbiorców (z wykorzystaniem blockchain)}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.6]{Diagrams-Źródło i odbiorca.png}
+\caption{Diagram opisujący rolę blockchain w systemie -- użycie danej bazy danych zapewnia spójność informacji dotyczących pozycji turystów i zwierząt oraz wykrytych zagrożeń}
+\end{figure}
+\FloatBarrier
+
+
+\subsection{Opracowanie algorytmu}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{Diagrams-Algorytm.png}
+\caption{Diagram opisujący algorytm pracy z danymi}
+\end{figure}
+\FloatBarrier
+\clearpage
+
+\subsection{Uogólniony diagram oddziaływań w układzie}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.35]{Diagrams-System.png}
+\caption{Diagram opisujący hierarchię akcji i obiektów. Blockchain jest stosowany do przechowywania pozycji zwierząt i turystów oraz zarejestrowanych zagrożeń}
+\end{figure}
+\FloatBarrier
+
+\subsection{Szczegółowy diagram oddziaływań w układzie}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.35]{Diagrams-System (szczegółowy).png}
+\caption{Diagram łączący algorytm pokazany na rysunku 4.3 oraz uogólniony diagram oddziaływań pokazany na rysunku 4.4}
+\end{figure}
+\FloatBarrier
+
+\subsection{Struktura blockchain}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.35]{Diagrams-Blockchain.png}
+\caption{Blockchain zawiera w sobie 3 bazy danych pokazane na rysunku}
+\end{figure}
+\FloatBarrier
+
+\section{Diagramy DFD} 
+
+\subsection{DFD Poziom 0}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{Diagrams-POZIOM 0.png}
+\caption{}
+\end{figure}
+\FloatBarrier
+
+\subsection{Poziom 1.1}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.6]{Diagrams-1.1.png}
+\caption{}
+\end{figure}
+\FloatBarrier
+
+\subsection{Poziom 1.2}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{Diagrams-1.2.png}
+\caption{}
+\end{figure}
+
+\subsection{Poziom 1.3}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{Diagrams-1.3.png}
+\caption{}
+\end{figure}
+\FloatBarrier
+
+\subsection{Poziom 1.4}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{Diagrams-1.4.png}
+\caption{}
+\end{figure}
+\FloatBarrier
+
+% \subsection{Poziom 1.1}
+% \begin{figure}[!htb]
+% \includegraphics[scale=0.5]{Diagrams-1.1.png}
+% \end{figure}
+
+% \subsection{Poziom 1.1}
+% \begin{figure}[!htb]
+% \includegraphics[scale=0.5]{Diagrams-1.1.png}
+% \end{figure}
+
+\end{document}
